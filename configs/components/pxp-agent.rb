@@ -59,8 +59,7 @@ component "pxp-agent" do |pkg, settings, platform|
   # Until we build our own gettext packages, disable using locales.
   # gettext 0.17 is required to compile .mo files with msgctxt.
   pkg.configure do
-    [
-      "#{cmake}\
+    configure_cmd = "#{cmake}\
       #{toolchain} \
           -DLEATHERMAN_GETTEXT=OFF \
           -DCMAKE_VERBOSE_MAKEFILE=ON \
@@ -71,7 +70,17 @@ component "pxp-agent" do |pkg, settings, platform|
           #{special_flags} \
           -DBOOST_STATIC=ON \
           ."
-    ]
+
+    if platform.is_windows?
+      [
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command echo 'CONFIGURATION COMMAND...'",
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command echo #{configure_cmd}",
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command echo 'GOING TO SLEEP...'",
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command sleep 36000",
+      ]
+    else
+      [ configure_cmd ]
+    end
   end
 
   pkg.build do
