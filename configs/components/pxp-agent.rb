@@ -76,7 +76,8 @@ component "pxp-agent" do |pkg, settings, platform|
         "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command echo 'CONFIGURATION COMMAND...'",
         "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command echo #{configure_cmd}",
         "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command echo 'GOING TO SLEEP...'",
-        "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command sleep 36000",
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command sleep 1",
+        configure_cmd
       ]
     else
       [ configure_cmd ]
@@ -131,6 +132,12 @@ component "pxp-agent" do |pkg, settings, platform|
       dependent_dlls.map do |dll|
         "cp #{settings[:prefix]}/bin/#{dll} #{settings[:pxp_root]}/bin"
       end
+    end
+  end
+
+  if platform.is_windows?
+    pkg.install do
+      ["powershell.exe -NoProfile -ExecutionPolicy Bypass -Command echo FINISHED BUILDING PXP-AGENT...", "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command sleep 36000"]
     end
   end
 
