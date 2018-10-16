@@ -7,6 +7,10 @@ module Puppet
       module_function :irb_command
 
       def command(host, cmd, type)
+        # Need to call this in order to get the value of
+        # privatebindir
+        configure_type_defaults_on(host)
+
         return on(host, "which #{cmd}").stdout.chomp unless type == 'aio'
         return "env PATH=\"#{host['privatebindir']}:${PATH}\" cmd /c #{cmd}" if host['platform'] =~ /windows/
         "env PATH=\"#{host['privatebindir']}:${PATH}\" #{cmd}"
