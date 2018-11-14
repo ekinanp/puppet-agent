@@ -18,7 +18,7 @@ component "virt-what" do |pkg, settings, platform|
   end
 
   if platform.is_rpm?
-    pkg.build_requires "util-linux"
+    pkg.build_requires "util-linux" unless platform.name =~ /fedora-28/
   end
 
   if platform.is_linux?

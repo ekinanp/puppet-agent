@@ -9,4 +9,5 @@ platform "ubuntu-16.04-ppc64el" do |plat|
   plat.install_build_dependencies_with "DEBIAN_FRONTEND=noninteractive; apt-get install -qy --no-install-recommends "
   plat.cross_compiled true
   plat.vmpooler_template "ubuntu-1604-x86_64"
+  plat.base_docker_image "ubuntu:16.04"
 end
