@@ -36,6 +36,7 @@ component 'dmidecode' do |pkg, settings, platform|
 
   pkg.install do
     [
+      "echo 'THIS IS A DEMO ... GENERATING A RANDOM NUMBER TO INVALIDATE THE CACHE: #{rand(9999)}'",
       "#{platform[:make]} prefix=#{settings[:prefix]} -j$(($(#{platform[:num_cores]}) + 1)) install",
       "rm -f #{settings[:bindir]}/vpddecode #{settings[:bindir]}/biosdecode #{settings[:bindir]}/ownership",
       "rm -f #{settings[:mandir]}/man8/ownership.8 #{settings[:mandir]}/man8/biosdecode.8 #{settings[:mandir]}/man8/vpddecode.8"
