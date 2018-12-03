@@ -23,7 +23,7 @@ component "leatherman" do |pkg, settings, platform|
     pkg.build_requires "pl-toolchain-#{platform.architecture}"
     pkg.build_requires "pl-boost-#{platform.architecture}"
     pkg.build_requires "pl-gettext-#{platform.architecture}"
-  elsif platform.name =~ /sles-15/
+  elsif platform.name =~ /sles-15|fedora-29/
     # These platforms use their default OS toolchain and have package
     # dependencies configured in the platform provisioning step.
   else
@@ -33,7 +33,7 @@ component "leatherman" do |pkg, settings, platform|
   end
 
   pkg.build_requires "puppet-runtime" # Provides curl and ruby
-  pkg.build_requires "runtime" unless platform.name =~ /sles-15/
+  pkg.build_requires "runtime" unless platform.name =~ /sles-15|fedora-29/
 
   ruby = "#{settings[:host_ruby]} -rrbconfig"
 
@@ -70,11 +70,15 @@ component "leatherman" do |pkg, settings, platform|
 
     # Use environment variable set in environment.bat to find locale files
     leatherman_locale_var = "-DLEATHERMAN_LOCALE_VAR='PUPPET_DIR' -DLEATHERMAN_LOCALE_INSTALL='share/locale'"
-  elsif platform.name =~ /sles-15/
+  elsif platform.name =~ /sles-15|fedora-29/
     # These platforms use the default OS toolchain, rather than pl-build-tools
     cmake = "cmake"
     toolchain = ""
     boost_static_flag = "-DBOOST_STATIC=OFF"
+
+    if platform.name =~ /fedora-29/
+      special_flags = "-DCMAKE_CXX_FLAGS='-Wno-error=parentheses -Wno-error=class-memaccess -Wno-error=ignored-qualifiers -Wno-error=catch-value -O1'"
+    end
   else
     toolchain = "-DCMAKE_TOOLCHAIN_FILE=/opt/pl-build-tools/pl-build-toolchain.cmake"
     cmake = "/opt/pl-build-tools/bin/cmake"
