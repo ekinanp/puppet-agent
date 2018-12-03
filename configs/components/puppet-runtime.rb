@@ -27,7 +27,7 @@ component 'puppet-runtime' do |pkg, settings, platform|
 
   # These platforms are built with the default OS distro toolchain, and
   # thus have additional package deps
-  if platform.name =~ /sles-15/
+  if platform.name =~ /sles-15|fedora-29/
     pkg.requires 'libboost_atomic1_66_0'
     pkg.requires 'libboost_chrono1_66_0'
     pkg.requires 'libboost_date_time1_66_0'
